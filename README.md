@@ -108,6 +108,7 @@ You can install the NVIDIA driver from the link above by selecting the reference
 3. This step is mandatory after step 2 to verify if all the needed packages was successfully installed
 
 Run `nvidia-smi` on your terminal to check if the driver is correctly installed, you should get table below with the version of your driver and CUDA
+
 	```
 	+-----------------------------------------------------------------------------+
 	| NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.6     |
@@ -120,7 +121,6 @@ Run `nvidia-smi` on your terminal to check if the driver is correctly installed,
 	| N/A   39C    P8    10W /  N/A |    338MiB /  6144MiB |      0%      Default |
 	|                               |                      |                  N/A |
 	+-------------------------------+----------------------+----------------------+
-		                                                                       
 	+-----------------------------------------------------------------------------+
 	| Processes:                                                                  |
 	|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
@@ -133,13 +133,16 @@ Run `nvidia-smi` on your terminal to check if the driver is correctly installed,
 	+-----------------------------------------------------------------------------+
 	```
 Run `nvcc -V` on your terminal to check CUDA Toolkit version
+
 	```
 	nvcc: NVIDIA (R) Cuda compiler driver
 	Copyright (c) 2005-2019 NVIDIA Corporation
 	Built on Sun_Jul_28_19:07:16_PDT_2019
 	Cuda compilation tools, release 10.1, V10.1.243
 	```
+	
 Run `dpkg -l | grep libnvinfer` to check the version of TensorRT, you should have the output below according to the version of TensorRT you have installed
+
 	```
 	ii  libnvinfer-bin                                              8.4.0-1+cuda11.6                    amd64        TensorRT binaries
 	ii  libnvinfer-dev                                              8.4.0-1+cuda11.6                    amd64        TensorRT development libraries and headers
@@ -151,7 +154,9 @@ Run `dpkg -l | grep libnvinfer` to check the version of TensorRT, you should hav
 	ii  python3-libnvinfer                                          8.4.0-1+cuda11.6                    amd64        Python 3 bindings for TensorRT
 	ii  python3-libnvinfer-dev                                      8.4.0-1+cuda11.6                    amd64        Python 3 development package for TensorRT
 	```
+	
 Run `dpkg -l | grep cuda` to check the version of CUDA
+
 Run `dpkg -l | grep cudnn` to check the version of CuDNN
 
 4.  Install the dependencies for Python3 and download darknet weights and onnx models
