@@ -92,10 +92,20 @@ parser.add_argument('-r', '--resolution', help="Set the resolution of the input 
 parser.add_argument('-p', '--precision', help="Set the precision mode [FP32, FP16 or INT8]", type=str)
 parser.add_argument('-b', '--batch', help="Set The size of the batch", type=int)
 parser.add_argument('-v', '--verbose', help="Enable verbose to check the logs", action='store_true')
+parser.add_argument('-f', '--frames', help="Set number of frame for inference", type=int)
 
 args = parser.parse_args()
 
-batch_size = args.batch
+# Set batch size
+batch_size = 1
+if args.batch is not None:
+	batch_size = args.batch
+
+# Set number of frame
+nbr_frame = 1000
+if args.frames is not None:
+	nbr_frame = args.frames
+
 
 TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE) if args.verbose else trt.Logger()
 colors = ['red','blue','green','yellow']
@@ -284,7 +294,6 @@ For more information use the commande : python3 onnx_to_tensorrt.py -h""")
         # Benchmark
         [cuda.memcpy_htod_async(inp.device, inp.host, stream) for inp in inputs]
         stream.synchronize()
-        nbr_frame = 1000
         start_time = time.time()
         for i in range(nbr_frame):
             context.execute_async_v2(bindings=bindings, stream_handle=stream.handle)

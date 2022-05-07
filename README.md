@@ -11,7 +11,7 @@
 - [Changelog](#changelog)
 - [Known issues](#known-issues)
 
-## Enviroments:
+## Enviroments
 
 This repository was tested with the following environments 
 
@@ -59,9 +59,9 @@ This is an edited NVIDIA sample about how to implement YOLOv3 and YOLOv3-Tiny us
 
 ## How does this sample work?
 
-First, the original YOLOv3 specification from the paper is converted to the Open Neural Network Exchange (ONNX) format in `yolov3_to_onnx.py` (only has to be done once).
+First, you need to install all TensorRT dependencies (See Prerequisites section) and then run `sh get_requirements.sh` (only has to be done once).
 
-Second, this ONNX representation of YOLOv3 is used to build a TensorRT engine, followed by inference on a sample image in `onnx_to_tensorrt.py`. The predicted bounding boxes are finally drawn to the original input image and saved to disk.
+Second, this ONNX representation of YOLOv3 is used to build a TensorRT engine, followed by inference on a sample image in `onnx_to_tensorrt_v7.py` for TensorRT v7 or `onnx_to_tensorrt_v8.py` for TensorRT v8. The predicted bounding boxes are finally drawn to the original input image and saved to disk.
 
 After inference, post-processing including bounding-box clustering is applied. The resulting bounding boxes are eventually drawn to a new image file and stored on disk for inspection.
 
@@ -91,9 +91,11 @@ You can download and install CUDA according to the version of TensorRT you want 
 - [CuDNN](https://developer.nvidia.com/rdp/cudnn-archive)
 
 You can download CuDNN in the link above and run the CLI below, in my case i've installed CuDNN 8.3.3 for CUDA 11.5, but it also worked for CUDA 11.6
+
 	`sudo dpkg -i cudnn-local-repo-ubuntu2004-8.3.3.40_1.0-1_amd64.deb`
 	
-- [CUDA Toolkit]
+- CUDA Toolkit
+
 	`sudo apt install nvidia-cuda-toolkit`
 
 - [TensorRT](https://developer.nvidia.com/nvidia-tensorrt-download)
