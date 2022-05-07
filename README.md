@@ -1,6 +1,7 @@
 # Object Detection With The ONNX TensorRT Backend In Python using YOLOv3 and YOLOv3-Tiny 
 
 **Table Of Contents**
+- [Enviroments](#Enviroments)
 - [Description](#description)
 - [How does this sample work?](#how-does-this-sample-work)
 - [Prerequisites](#prerequisites)
@@ -10,6 +11,26 @@
 - [Changelog](#changelog)
 - [Known issues](#known-issues)
 - [folders and scripts] (#folders-and-scripts)
+
+## Enviroments:
+
+This repository was tested with the following environments 
+
+1. NVIDIA Jetson AGX Xavier 
+- [x] Python3
+- [x] Ubuntu 18.04
+- [x] CUDA 10.2
+- [x] CuDNN 8.0
+- [x] TensorRT 7.1.3
+- [x] YOLOv3 and YOLOv3-Tiny
+
+2. MSI GF65 Thin 10UE-284FR - NVIDIA GEFORCE RTX 3060
+- [x] Python3
+- [x] Ubuntu 20.04
+- [x] CUDA 11.6
+- [x] CuDNN 8.3.3
+- [x] TensorRT 8.4.0
+- [x] YOLOv3 and YOLOv3-Tiny
 
 ## Description
 
