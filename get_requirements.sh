@@ -1,5 +1,18 @@
 #!/bin/bash
 
+
+sudo apt-get install python3
+sudo apt-get install python3-pip
+
+echo "Installing all python dependencies..."
+pip3 install opencv-python
+pip3 install numpy
+pip3 install protobuf
+pip3 install onnx
+pip3 install pycuda
+pip3 install pillow
+pip3 install wget
+
 echo "Installing megatools package..."
 sudo apt install megatools
 
@@ -8,7 +21,6 @@ echo "Downloading calibration caches"
 wget "https://drive.google.com/uc?export=download&id=170uWN7AMSA6m-iUMglxs3oZpZQrJBPbb" -O calibration_cache.tar.gz
 tar xzvf calibration_cache.tar.gz calibration_cache
 rm calibration_cache.tar.gz
-
 
 echo "Downloading darknet weights..."
 megadl 'https://mega.nz/#!6Ho2mIgL!1ZxJZ_Ntm5imfNKZKH12CWNKRmstsUOZh2tAClx99hA'
