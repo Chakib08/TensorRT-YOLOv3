@@ -18,6 +18,7 @@ This repository was tested with the following environments
 
 1. NVIDIA Jetson AGX Xavier 
 - [x] Python3
+- [x] Jetpack 4.5.1
 - [x] Ubuntu 18.04
 - [x] CUDA 10.2
 - [x] CuDNN 8.0
@@ -68,7 +69,92 @@ After inference, post-processing including bounding-box clustering is applied. T
 
 For specific software versions, see the [TensorRT Installation Guide](https://docs.nvidia.com/deeplearning/sdk/tensorrt-archived/index.html).
 
-1.  Install the dependencies for Python3 and download darknet weights and onnx models
+1.  If you are using an NVIDIA Jetson board with the jetpack installed you can directly go to step 4 and run the `sh get_requirements.sh`
+2.  If you are using a laptop with an NVIDIA GPU you have to install the following packages :
+
+- [CUDA](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=20.04&target_type=deb_local)
+You can download and install CUDA according to the version of TensorRT you want to use, in my case i've installed CUDA 11.6 with the following commands :
+	```
+	$ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+	$ sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+	$ wget https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
+	$ sudo dpkg -i cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
+	$ sudo apt-key add /var/cuda-repo-ubuntu2004-11-6-local/7fa2af80.pub
+	$ sudo apt-get update
+	$ sudo apt-get -y install cuda
+	```
+- [CuDNN](https://developer.nvidia.com/rdp/cudnn-archive)
+You can download CuDNN in the link above and run the CLI below, in my case i've installed CuDNN 8.3.3 for CUDA 11.5, but it also worked for CUDA 11.6
+	`sudo dpkg -i cudnn-local-repo-ubuntu2004-8.3.3.40_1.0-1_amd64.deb`
+	
+- [CUDA Toolkit]
+	`sudo apt install nvidia-cuda-toolkit`
+
+- [TensorRT](https://developer.nvidia.com/nvidia-tensorrt-download)
+You can download the version of TensorRT you want to use, in my case i've donwloaded the 8.4.0 `nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212_1-1_amd64.deb` and i installed this later with commands below or you can just follow the [NVIDIA TensorRT instllation page](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html). Make sure you have installed CUDA before installing TensorRT.
+	```
+	os="ubuntu2004"
+	tag="cuda11.6-trt8.4.0.6-ea-20220212"
+	sudo dpkg -i nv-tensorrt-repo-${os}-${tag}_1-1_amd64.deb
+	sudo apt-key add /var/nv-tensorrt-repo-${os}-${tag}/7fa2af80.pub
+
+	sudo apt-get update
+	sudo apt-get install tensorrt`
+	```
+- [NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us#) (Skip this part if your driver is already installed)
+You can install the NVIDIA driver from the link above by selecting the reference of your GPU or installed it with the following CLI
+	`sudo apt install nvidia-driver-510 nvidia-dkms-510`
+	
+3. This step is mandatory after step 2 to verify if all the needed packages was successfully installed
+
+Run `nvidia-smi` on your terminal to check if the driver is correctly installed, you should get table below with the version of your driver and CUDA
+	```
+	+-----------------------------------------------------------------------------+
+	| NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.6     |
+	|-------------------------------+----------------------+----------------------+
+	| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+	| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+	|                               |                      |               MIG M. |
+	|===============================+======================+======================|
+	|   0  NVIDIA GeForce ...  On   | 00000000:01:00.0 Off |                  N/A |
+	| N/A   39C    P8    10W /  N/A |    338MiB /  6144MiB |      0%      Default |
+	|                               |                      |                  N/A |
+	+-------------------------------+----------------------+----------------------+
+		                                                                       
+	+-----------------------------------------------------------------------------+
+	| Processes:                                                                  |
+	|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+	|        ID   ID                                                   Usage      |
+	|=============================================================================|
+	|    0   N/A  N/A      1070      G   /usr/lib/xorg/Xorg                 45MiB |
+	|    0   N/A  N/A      1636      G   /usr/lib/xorg/Xorg                161MiB |
+	|    0   N/A  N/A      1807      G   /usr/bin/gnome-shell               28MiB |
+	|    0   N/A  N/A      2779      G   ...566448415806487972,131072       91MiB |
+	+-----------------------------------------------------------------------------+
+	```
+Run `nvcc -V` on your terminal to check CUDA Toolkit version
+	```
+	nvcc: NVIDIA (R) Cuda compiler driver
+	Copyright (c) 2005-2019 NVIDIA Corporation
+	Built on Sun_Jul_28_19:07:16_PDT_2019
+	Cuda compilation tools, release 10.1, V10.1.243
+	```
+Run `dpkg -l | grep libnvinfer` to check the version of TensorRT, you should have the output below according to the version of TensorRT you have installed
+	```
+	ii  libnvinfer-bin                                              8.4.0-1+cuda11.6                    amd64        TensorRT binaries
+	ii  libnvinfer-dev                                              8.4.0-1+cuda11.6                    amd64        TensorRT development libraries and headers
+	ii  libnvinfer-doc                                              8.4.0-1+cuda11.6                    all          TensorRT documentation
+	ii  libnvinfer-plugin-dev                                       8.4.0-1+cuda11.6                    amd64        TensorRT plugin libraries
+	ii  libnvinfer-plugin8                                          8.4.0-1+cuda11.6                    amd64        TensorRT plugin libraries
+	ii  libnvinfer-samples                                          8.4.0-1+cuda11.6                    all          TensorRT samples
+	ii  libnvinfer8                                                 8.4.0-1+cuda11.6                    amd64        TensorRT runtime libraries
+	ii  python3-libnvinfer                                          8.4.0-1+cuda11.6                    amd64        Python 3 bindings for TensorRT
+	ii  python3-libnvinfer-dev                                      8.4.0-1+cuda11.6                    amd64        Python 3 development package for TensorRT
+	```
+Run `dpkg -l | grep cuda` to check the version of CUDA
+Run `dpkg -l | grep cudnn` to check the version of CuDNN
+
+4.  Install the dependencies for Python3 and download darknet weights and onnx models
 
 	`$ sh get_requirements.sh`
 
