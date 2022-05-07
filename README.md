@@ -34,9 +34,9 @@ This repository was tested with the following environments
 
 ## Description
 
-This is an edited NVIDIA sample about how to implement YOLOv3 and YOLOv3-Tiny using TensorRT to do benchmarks, the original can be found in the path **/usr/src/tensorrt/samples/python/yolov3_onnx/onnx_to_tensorrt.py**, so before executing this code, we have to execute [yolov3_to_onnnx.py] to parse the DarkNet model into ONNX model or import directly the onnx model from ONNX github, after the generation of the serialized model.onnx, we can run this code and specify the parameters like the model, resolution. For example to run a YOLOv3 model on the image kite.jpg with a 416x416 resolution and INT8 precision mode and a batch size of 1 we have to use this command :
+This is an edited NVIDIA sample about how to implement YOLOv3 and YOLOv3-Tiny using TensorRT to do benchmarks, the original can be found in the path **/usr/src/tensorrt/samples/python/yolov3_onnx/onnx_to_tensorrt.py**, so before executing this code, we have to run  we can run `sh get_requirements.sh` to get onnx models, and then run `onnx_to_tensorrt_v8.py` and specify the parameters like the model, resolution. For example to run a YOLOv3 model on the image kite.jpg with a 416x416 resolution and INT8 precision mode and a batch size of 1 we have to use this command :
 
-`$ python3 onnx_to_tensorrt.py --image kite --model yolov3 --resolution 416 --precision INT8 --batch 1 --verbose`
+`$ python3 onnx_to_tensorrt_v8.py --image kite --model yolov3 --resolution 416 --precision INT8 --batch 1 --verbose`
 	
 	```
 	CLI arguments:
