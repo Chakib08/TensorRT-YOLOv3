@@ -14,9 +14,9 @@
 ## Description
 
 This is an edited NVIDIA sample about how to implement YOLOv3 and YOLOv3-Tiny using TensorRT to do benchmarks, the original can be found in the path **/usr/src/tensorrt/samples/python/yolov3_onnx/onnx_to_tensorrt.py**, so before executing this code, we have to execute [yolov3_to_onnnx.py] to parse the DarkNet model into ONNX model or import directly the onnx model from ONNX github, after the generation of the serialized model.onnx, we can run this code and specify the parameters like the model, resolution. For example to run a YOLOv3 model on the image kite.jpg with a 416x416 resolution and INT8 precision mode and a batch size of 1 we have to use this command :
-==============================================================================================================================================================================================================
-python3 onnx_to_tensorrt.py --image kite --model yolov3 --resolution 416 --precision INT8 --batch 1 --verbose
-==============================================================================================================================================================================================================
+
+`$ python3 onnx_to_tensorrt.py --image kite --model yolov3 --resolution 416 --precision INT8 --batch 1 --verbose`
+
 CLI arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT, --image INPUT
@@ -47,12 +47,9 @@ After inference, post-processing including bounding-box clustering is applied. T
 
 For specific software versions, see the [TensorRT Installation Guide](https://docs.nvidia.com/deeplearning/sdk/tensorrt-archived/index.html).
 
-1.  Install the dependencies for Python.
-	-   For Python 2 users, from the root directory, run:
-	`python2 -m pip install -r requirements.txt`
+1.  Install the dependencies for Python3 and download darknet weights and onnx models
 
-	-   For Python 3 users, from the root directory, run:
-	`python3 -m pip install -r requirements.txt`
+	`$ sh get_requirements.sh`
 
 ## Running the sample
 
