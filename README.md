@@ -1,7 +1,7 @@
 # Object Detection With The ONNX TensorRT Backend In Python using YOLOv3 and YOLOv3-Tiny 
 
 **Table Of Contents**
-- [Enviroments](#Enviroments)
+- [Enviroments](#enviroments)
 - [Description](#description)
 - [How does this sample work?](#how-does-this-sample-work)
 - [Prerequisites](#prerequisites)
@@ -10,7 +10,6 @@
 - [License](#license)
 - [Changelog](#changelog)
 - [Known issues](#known-issues)
-- [folders and scripts] (#folders-and-scripts)
 
 ## Enviroments:
 
@@ -73,6 +72,7 @@ For specific software versions, see the [TensorRT Installation Guide](https://do
 2.  If you are using a laptop with an NVIDIA GPU you have to install the following packages :
 
 - [CUDA](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=20.04&target_type=deb_local)
+
 You can download and install CUDA according to the version of TensorRT you want to use, in my case i've installed CUDA 11.6 with the following commands :
 	```
 	$ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
@@ -84,6 +84,7 @@ You can download and install CUDA according to the version of TensorRT you want 
 	$ sudo apt-get -y install cuda
 	```
 - [CuDNN](https://developer.nvidia.com/rdp/cudnn-archive)
+
 You can download CuDNN in the link above and run the CLI below, in my case i've installed CuDNN 8.3.3 for CUDA 11.5, but it also worked for CUDA 11.6
 	`sudo dpkg -i cudnn-local-repo-ubuntu2004-8.3.3.40_1.0-1_amd64.deb`
 	
@@ -91,6 +92,7 @@ You can download CuDNN in the link above and run the CLI below, in my case i've 
 	`sudo apt install nvidia-cuda-toolkit`
 
 - [TensorRT](https://developer.nvidia.com/nvidia-tensorrt-download)
+
 You can download the version of TensorRT you want to use, in my case i've donwloaded the 8.4.0 `nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212_1-1_amd64.deb` and i installed this later with commands below or you can just follow the [NVIDIA TensorRT instllation page](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html). Make sure you have installed CUDA before installing TensorRT.
 	```
 	os="ubuntu2004"
@@ -102,6 +104,7 @@ You can download the version of TensorRT you want to use, in my case i've donwlo
 	sudo apt-get install tensorrt`
 	```
 - [NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us#) (Skip this part if your driver is already installed)
+
 You can install the NVIDIA driver from the link above by selecting the reference of your GPU or installed it with the following CLI
 	`sudo apt install nvidia-driver-510 nvidia-dkms-510`
 	
@@ -165,24 +168,14 @@ Run `dpkg -l | grep cudnn` to check the version of CuDNN
 
 ## Running the sample
 
-1.  Create an ONNX version of YOLOv3 with the following command. The Python script will also download all necessary files from the official mirrors (only once).
-	`python yolov3_to_onnx.py`
-
-	When running the above command for the first time, the output should look similar to the following:
-	```
-	Downloading from https://raw.githubusercontent.com/pjreddie/darknet/f86901f6177dfc6116360a13cc06ab680e0c86b0/cfg/yolov3.cfg, this may take a while...
-	100% [................................................................................] 8342 / 8342 
-	Downloading from https://pjreddie.com/media/files/yolov3.weights, this may take a while...
-	100% [................................................................................] 248007048 / 248007048
-	[...]
-	%106_convolutional = Conv[auto_pad = u'SAME_LOWER', dilations = [1, 1], kernel_shape = [1, 1], strides = [1, 1]]
-	(%105_convolutional_lrelu, %106_convolutional_conv_weights, %106_convolutional_conv_bias)
-	return %082_convolutional, %094_convolutional,%106_convolutional
-	}
-	```
+1.  Run on your terminal `sh get_requirements.sh` to get ONNX models if you haven't already run this command.
 
 2.  Build a TensorRT engine from the generated ONNX file and run inference on a sample image and show with OpenCV the detection according of the index of the batch.
-	`python onnx_to_tensorrt.py`
+	For TensorRT v7 version use
+	`python3 onnx_to_tensorrt_v7.py -i dog -m yolov3 -r 416 -p FP32 -b 1 --verbose`
+	
+	For TensorRT v8 version use
+	`python3 onnx_to_tensorrt_v8.py -i dog -m yolov3 -r 416 -p FP32 -b 1 --verbose`
 
 	Building an engine from file yolov3.onnx, this may take a while...
 	Running inference on image dog.jpg...
@@ -196,8 +189,7 @@ Run `dpkg -l | grep cudnn` to check the version of CuDNN
 	 [502.82192616  62.90276415 149.57946582 124.59640347]] [0.81173893 0.79401759 0.73235517] [16  2  2]
 	Saved image with bounding boxes of detected objects to dog_out_yolov3-tiny_416_INT8_bs1.png.
 	```
-3. A window wil be opened which contain the output image with the bounding boxes of the detection according the whole parameters set with the performances and the image is saved in the yolov3_outputs folder or the yolov3_tiny_outputs depending of the model used in the CLI.
-
+3. A window wil be opened which contain the output image with the bounding boxes of the detection according the whole parameters set with the performances and the image is saved in the yolov3_outputs folder or the yolov3_tiny_outputs depending of the model used in the CLI. Notice that you can run the model with FP16 or INT8 precision mode, change the batch and input resolution of the model.
 
 
 # Additional resources
@@ -227,28 +219,13 @@ September 2021
 This `README.md` file was edited according to the one that is located in `/usr/src/tensorrt/samples/python/yolov3_onnx`.
 # Known issues
 
-There are no known issues in this sample.
+If you use the CLI `nvidia-smi` and then you have the following output
+
+`NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.`
+
+You need to fix your Secure boot loader by rebooting your PC, and then go to the BIOS in the security section and you have to disable the security boot, check this [video](https://youtu.be/epCN8bSkYRg) to fix this issue.
 
 
-# Folders and scripts
-
-**Scripts**
-	[data_processing.py] -> Include the preprocess and the post-process (Non-maximum Suppression) for both of YOLOv3 et YOLOv3-Tiny.
-	[common.py] -> Include functions which allow us to run inference of the model on an image using CUDA.
-	[change_batch.py] -> Change the batch of the input tensor of an ONNX neural networks.
-	[calibrator.py] -> Include a class named YOLOEntropyCalibrator that allows to calibrate an ONNX model with calibration-set of 1000 images for INT8 Quantization.
-	[yolov3_to_onnx] -> Generate YOLOv3 with ONNX format, to get YOLOv3-Tiny you check on ONNX github or generate it with **https://github.com/jkjung-avt/tensorrt_demos/tree/master/yolo** github.
-	[onnx_to_tensorrt] -> The main script of the project which get edited to do benchmarks with of YOLOv3 and YOLOv3-Tiny according to the parameters set in the CLI as resolution, precision and batch.
-
-**Folders**
-	[calib_images] -> Include the calibration-set of 1000 images for INT8 Quantization (the folder is empty due to memory of the target).
-	[calibration_caches] -> The calibration caches generated for with the algorithm **IInt8EntropyCalibrator2** included in the TensorRT Python API **https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Int8/EntropyCalibrator2.html**.
-	[darknet_weights] -> Include the congiguration (.cfg) and the weights (.weights) files of DarkNet-53 YOLOv3.
-	[onnx_models] -> Include models with ONNX format.
-	[tensorrt_engine] -> Include the optimized models generated with TensorRT.
-	[test_images] -> Some test images to run the inference.
-	[yolov3_outputs] -> Output images with YOLOv3 TensorRT inference, each image has a name according with the parameters set for the inference : imageName_out_yolov3_resolution_precision_batchIndex.png
-	[yolov3_tiny_outputs] -> Output images with YOLOv3-Tiny TensorRT inference, each image has a name according with the parameters set for the inference : imageName_out_yolov3-tiny_resolution_precision_batchIndex.png
 	
 	
 	
