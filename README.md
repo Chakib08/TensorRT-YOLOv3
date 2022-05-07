@@ -37,21 +37,24 @@ This repository was tested with the following environments
 This is an edited NVIDIA sample about how to implement YOLOv3 and YOLOv3-Tiny using TensorRT to do benchmarks, the original can be found in the path **/usr/src/tensorrt/samples/python/yolov3_onnx/onnx_to_tensorrt.py**, so before executing this code, we have to execute [yolov3_to_onnnx.py] to parse the DarkNet model into ONNX model or import directly the onnx model from ONNX github, after the generation of the serialized model.onnx, we can run this code and specify the parameters like the model, resolution. For example to run a YOLOv3 model on the image kite.jpg with a 416x416 resolution and INT8 precision mode and a batch size of 1 we have to use this command :
 
 `$ python3 onnx_to_tensorrt.py --image kite --model yolov3 --resolution 416 --precision INT8 --batch 1 --verbose`
+	
+	```
+	CLI arguments:
 
-CLI arguments:
-  -h, --help            show this help message and exit
-  -i INPUT, --input INPUT, --image INPUT
-                        Set the name of the input image
-  -m MODEL, --model MODEL
-                        Set the name of the model you want to use, <<yolov3>>
-                        to use YOLOv3 or <<yolov3-tiny>> to use YOLOv3-Tiny
-  -r RESOLUTION, --resolution RESOLUTION
-                        Set the resolution of the input [608, 416 or 288]
-  -p PRECISION, --precision PRECISION
-                        Set the precision mode [FP32, FP16 or INT8]
-  -b BATCH, --batch BATCH
-                        Set The size of the batch
-  -v, --verbose         Enable verbose to check the logs
+	  -h, --help            show this help message and exit
+	  -i INPUT, --input INPUT, --image INPUT
+		                Set the name of the input image
+	  -m MODEL, --model MODEL
+		                Set the name of the model you want to use, <<yolov3>>
+		                to use YOLOv3 or <<yolov3-tiny>> to use YOLOv3-Tiny
+	  -r RESOLUTION, --resolution RESOLUTION
+		                Set the resolution of the input [608, 416 or 288]
+	  -p PRECISION, --precision PRECISION
+		                Set the precision mode [FP32, FP16 or INT8]
+	  -b BATCH, --batch BATCH
+		                Set The size of the batch
+	  -v, --verbose         Enable verbose to check the logs
+	  ```
 .
 
 ## How does this sample work?
@@ -74,6 +77,7 @@ For specific software versions, see the [TensorRT Installation Guide](https://do
 - [CUDA](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=20.04&target_type=deb_local)
 
 You can download and install CUDA according to the version of TensorRT you want to use, in my case i've installed CUDA 11.6 with the following commands :
+
 	```
 	$ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 	$ sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
@@ -83,6 +87,7 @@ You can download and install CUDA according to the version of TensorRT you want 
 	$ sudo apt-get update
 	$ sudo apt-get -y install cuda
 	```
+	
 - [CuDNN](https://developer.nvidia.com/rdp/cudnn-archive)
 
 You can download CuDNN in the link above and run the CLI below, in my case i've installed CuDNN 8.3.3 for CUDA 11.5, but it also worked for CUDA 11.6
@@ -94,6 +99,7 @@ You can download CuDNN in the link above and run the CLI below, in my case i've 
 - [TensorRT](https://developer.nvidia.com/nvidia-tensorrt-download)
 
 You can download the version of TensorRT you want to use, in my case i've donwloaded the 8.4.0 `nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212_1-1_amd64.deb` and i installed this later with commands below or you can just follow the [NVIDIA TensorRT instllation page](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html). Make sure you have installed CUDA before installing TensorRT.
+
 	```
 	os="ubuntu2004"
 	tag="cuda11.6-trt8.4.0.6-ea-20220212"
@@ -101,8 +107,9 @@ You can download the version of TensorRT you want to use, in my case i've donwlo
 	sudo apt-key add /var/nv-tensorrt-repo-${os}-${tag}/7fa2af80.pub
 
 	sudo apt-get update
-	sudo apt-get install tensorrt`
+	sudo apt-get install tensorrt
 	```
+	
 - [NVIDIA Driver](https://www.nvidia.com/Download/index.aspx?lang=en-us#) (Skip this part if your driver is already installed)
 
 You can install the NVIDIA driver from the link above by selecting the reference of your GPU or installed it with the following CLI
